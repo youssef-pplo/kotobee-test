@@ -1,22 +1,25 @@
 #!/bin/bash
 set -e
 
-# Use a unique temp file name to avoid permission clashes
-TEMP_DEB="/tmp/kotobee_$(date +%s).deb"
+# Download to the current folder instead of /tmp to avoid permission errors
+TEMP_DEB="./kotobee_installer.deb"
 DEB_URL="https://github.com/youssef-pplo/kotobee-test/releases/download/v1.9.6/kotobee-author.deb"
 
 echo "--- Starting Kotobee Author Installation ---"
 
-# 1. Download - adding 'sudo' here ensures we can write to /tmp without error 23
+# 1. Download with progress bar
 echo "Downloading package (155MB)..."
-sudo curl -L --progress-bar -o "$TEMP_DEB" "$DEB_URL"
+# We removed 'sudo' from curl and changed destination to local folder
+curl -L --progress-bar -o "$TEMP_DEB" "$DEB_URL"
 
-# 2. Install
+# 2. Update and Install
 echo "Installing..."
 sudo apt-get update -qq
 sudo apt-get install -y "$TEMP_DEB"
 
 # 3. Clean up
-sudo rm -f "$TEMP_DEB"
+rm -f "$TEMP_DEB"
 
-echo "✅ Done! You can now launch Kotobee Author."
+echo "----------------------------------------------"
+echo "✅ Done! Kotobee Author is installed."
+echo "----------------------------------------------"
